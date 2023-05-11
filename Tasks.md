@@ -67,3 +67,28 @@ largeImageURL - посилання на велике зображення для
     <img src="" alt="" />
   </div>
 </div> -->
+
+
+
+export class PixabayApi {
+  #BASE_URL = 'https://pixabay.com/api/';
+  #API_KEY = '34707727-e20630cf7e49276d83ab15980';
+
+  options = new URLSearchParams([
+    ['orientation', 'horizontal'],
+    ['safesearch', 'true'],
+    ['per_page', 18],
+    ['image_type', 'photo'],
+  ]);
+  page = 1;
+
+  async fetch(query) {
+    const response = await axios(
+      `${this.#BASE_URL}?key=${this.#API_KEY}&q=${query}&page=${this.page}&${
+        this.options
+      }`
+    );
+
+    return await response.data;
+  }
+}
