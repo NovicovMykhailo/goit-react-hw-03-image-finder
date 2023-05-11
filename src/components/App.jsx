@@ -43,14 +43,13 @@ export class App extends Component {
           openModal={this.toggleModal}
           modalImage={this.modalImage}
         />
-        <Button/>
-
-
-        {showModal && 
-          <Modal onClose={this.toggleModal} children={<img src={largerImage} alt={alt}/>}/>
-
-        }
-
+        <Button />
+        {showModal && (
+          <Modal
+            onClose={this.toggleModal}
+            children={<img src={largerImage} alt={alt} />}
+          />
+        )}
       </div>
     );
   }
