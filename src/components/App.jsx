@@ -7,21 +7,19 @@ import Modal from './Modal/Modal';
 export class App extends Component {
   state = {
     showModal: false,
-  }
-
-
+  };
 
   toggleModal = () => {
-    const {showModal} = this.state
+    const { showModal } = this.state;
     this.setState({ showModal: !showModal });
-  }
+  };
 
   render() {
     return (
       <div className={css.app}>
-        <Searchbar/>
-        {/* <Loader />
-        <Modal childern={<div><h1>тут будет модалка</h1></div>} /> */}
+        <Searchbar />
+        <Loader />
+        {this.state.showModal && <Modal onClose={this.toggleModal} />}
       </div>
     );
   }
