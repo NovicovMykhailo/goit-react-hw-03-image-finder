@@ -7,12 +7,12 @@ export default class Searchbar extends Component{
         itemToSearch: ''
     }
     onSubmit = (e) => {
-        e.preventDefault()
-        this.props.onSubmit(this.state.itemToSearch);
+      e.preventDefault()
+      this.props.onSubmit(this.state.itemToSearch);
+      this.setState({ itemToSearch: '' });
     }
     onChange = (e) => {
         this.setState({ itemToSearch: e.target.value });
-    
     }
 
     render() {

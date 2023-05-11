@@ -1,6 +1,9 @@
+import { Component } from 'react';
 import ImageGalleyItem from 'components/ImageGalleryItem/ImageGalleyItem';
 import css from './ImageGallery.module.css';
-import { Component } from 'react';
+// import Loader from '../Loader/Loader';
+
+
 
 export default class ImageGallery extends Component {
   //this.props => response Jseon parse
@@ -8,13 +11,29 @@ export default class ImageGallery extends Component {
     gallery: [],
   };
 
+  onClick = ({ largerImage, alt }) => {
+    this.props.modalImage({
+      largerImage: largerImage,
+      alt: alt,
+    });
+    this.props.openModal();
+  };
+
   render() {
+    const { images } = this.props;
+
     return (
       <ul className={css.ImageGallery}>
-        {this.props.map(image => {
-          console.log(image);
-          // return <ImageGalleyItem src={image.src} alt={image.alt} />;
-          return <ImageGalleyItem />;
+        {images.hits.map(image => {
+          return (
+            <ImageGalleyItem
+              onClick={this.onClick}
+              key={image.id}
+              src={image.webformatURL}
+              alt={image.tags}
+              largerImage={image.largeImageURL}
+            />
+          );
         })}
       </ul>
     );

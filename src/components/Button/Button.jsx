@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import css from './Button.module.css'
 
 export default class Button extends Component {
   // this.props.onSubmit
@@ -6,9 +7,9 @@ export default class Button extends Component {
 
   render() {
     return (
-      <li class="gallery-item">
-        <img src="" alt="" />
-      </li>
+      <button type="button" className={css.Button}>
+        Load More
+      </button>
     );
   }
 }
