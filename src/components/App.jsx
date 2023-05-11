@@ -3,27 +3,17 @@ import css from './App.module.css';
 import Searchbar from './Searchbar/Searchbar';
 import Loader from './Loader/Loader';
 import Modal from './Modal/Modal';
-// import Response from '../response.json';
+import { fetchByName, pagination } from '../services/pixabay-api';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 
 export class App extends Component {
-  #KEY = '34707727-e20630cf7e49276d83ab15980';
-  #URL = 'https://pixabay.com/api/?';
-
-  options = new URLSearchParams([
-    ['orientation', 'horizontal'],
-    ['safesearch', 'true'],
-    ['per_page', 12],
-    ['image_type', 'photo'],
-  ]);
-
   state = {
     foundImages: null,
     searchItem: '',
     showModal: false,
     showLoader: false,
-    page: 1,
+    nextPage: 1,
     largerImage: null,
     alt: null,
     error: null,
@@ -33,23 +23,26 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevSearch = prevState.searchItem;
     const nextSearch = this.state.searchItem;
-    const page = this.state.page;
 
     if (prevSearch !== nextSearch) {
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', nextPage: 2 });
 
-      fetch(
-        `${this.#URL}q=${this.state.searchItem}&key=${this.#KEY}&page=${page}&${
-          this.options
-        }`
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json();
+      fetchByName(nextSearch)
+        .then(foundImages => {
+          if (foundImages.total !== 0) {
+            this.setState({
+              foundImages: foundImages.hits,
+              status: 'resolved',
+              error: null,
+            });
+          } else {
+              this.setState({
+                status: 'rejected',
+                error: new Error(`Cannot find photos for ${nextSearch} category`),
+              });
           }
-          return Promise.reject(new Error('Oops Something Went Wrong'));
+
         })
-        .then(foundImages => this.setState({ foundImages, status: 'resolved' }))
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
@@ -71,10 +64,17 @@ export class App extends Component {
   };
 
   onLoadMore = data => {
-    this.setState(prevState => {
-      return { page: prevState.page + 1 };
-    });
-    //  fetching page
+    const { searchItem, nextPage } = this.state;
+
+    pagination(searchItem, nextPage)
+      .then(newImages =>
+        this.setState(({ foundImages, nextPage }) => ({
+          foundImages: [...foundImages, ...newImages.hits],
+          status: 'resolved',
+          nextPage: nextPage + 1,
+        }))
+      )
+      .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
   render() {
@@ -90,7 +90,11 @@ export class App extends Component {
             modalImage={this.modalImage}
           />
         )}
-        {status === 'rejected' && <h1>{error.message}</h1>}
+        {status === 'rejected' && (
+          <div className={css.error}>
+            <h1>{error.message}</h1>
+          </div>
+        )}
         {status === 'resolved' && <Button onClick={this.onLoadMore} />}
         {showModal && (
           <Modal

@@ -6,8 +6,8 @@ const Loader = () => {
     <div className={css.loader}>
       {
         <Oval
-          height={100}
-          width={100}
+          height={120}
+          width={120}
           color="grey"
           wrapperStyle={{}}
           wrapperClass=""

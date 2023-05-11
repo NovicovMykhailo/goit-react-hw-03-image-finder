@@ -9,13 +9,16 @@ export default class Searchbar extends Component{
     onSubmit = (e) => {
       e.preventDefault()
       this.props.onSubmit(this.state.itemToSearch);
-      this.setState({ itemToSearch: '' });
+      // this.setState({ itemToSearch: '' });
     }
     onChange = (e) => {
         this.setState({ itemToSearch: e.target.value });
-    }
+  }
+  reset = () => {
+    this.setState({ itemToSearch: '' });
+  }
 
-    render() {
+  render() {
         return (
           <header className={css.Searchbar}>
             <form className={css.SearchForm} onSubmit={this.onSubmit}>
@@ -23,7 +26,9 @@ export default class Searchbar extends Component{
                 <span className={css.SearchFormButtonLabel}>Search</span>
               </button>
 
-              <input onChange={this.onChange}
+              <input
+                onChange={this.onChange}
+                onClick={this.reset}
                 className={css.SearchFormInput}
                 type="text"
                 autoComplete="off"

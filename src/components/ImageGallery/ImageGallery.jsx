@@ -24,7 +24,7 @@ export default class ImageGallery extends Component {
 
     return (
       <ul className={css.ImageGallery}>
-        {images.hits.map(image => {
+        {images.map(image => {
           return (
             <ImageGalleyItem
               onClick={this.onClick}
