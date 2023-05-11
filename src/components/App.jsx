@@ -1,20 +1,28 @@
+import { Component } from 'react';
 import Loader from './Loader/Loader';
-// import { Oval } from 'react-loader-spinner';
+import css from './App.module.css';
+import Searchbar from './Searchbar/Searchbar';
+import Modal from './Modal/Modal';
 
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      <Loader />
+export class App extends Component {
+  state = {
+    showModal: false,
+  }
 
-    </div>
-  );
-};
+
+
+  toggleModal = () => {
+    const {showModal} = this.state
+    this.setState({ showModal: !showModal });
+  }
+
+  render() {
+    return (
+      <div className={css.app}>
+        <Searchbar/>
+        {/* <Loader />
+        <Modal childern={<div><h1>тут будет модалка</h1></div>} /> */}
+      </div>
+    );
+  }
+}
