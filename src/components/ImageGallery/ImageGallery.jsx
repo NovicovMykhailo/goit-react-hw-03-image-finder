@@ -1,12 +1,11 @@
 import { Component } from 'react';
 import ImageGalleyItem from 'components/ImageGalleryItem/ImageGalleyItem';
 import css from './ImageGallery.module.css';
-// import Loader from '../Loader/Loader';
+import PropTypes from 'prop-types'
 
 
 
 export default class ImageGallery extends Component {
-  //this.props => response Jseon parse
   state = {
     gallery: [],
   };
@@ -39,3 +38,9 @@ export default class ImageGallery extends Component {
     );
   }
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.array.isRequired,
+  openModal: PropTypes.func.isRequired,
+  modalImage: PropTypes.func.isRequired,
+};

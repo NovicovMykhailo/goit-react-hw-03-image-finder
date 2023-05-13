@@ -4,18 +4,18 @@
   grid-gap: 16px;
   padding-bottom: 24px;
 }
-.error{
+.error {
   display: flex;
-justify-content: center;
+  justify-content: center;
   align-items: center;
-  height:100vh;
+  height: 100vh;
   padding: 20px;
 }
-.error>h1{
+.error > h1 {
   text-align: center;
   font-weight: 400;
-  font-size: 50px;
+  font-size: 42px;
   color: rgb(73, 73, 73);
   text-transform: capitalize;
-
+  width: 33%;
 }

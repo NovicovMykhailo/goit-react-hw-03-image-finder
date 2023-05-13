@@ -17,7 +17,7 @@ export class App extends Component {
     largerImage: null,
     alt: null,
     error: null,
-    status: 'idle', //'penging', 'rejected', 'resolved'
+    status: 'idle',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -63,7 +63,7 @@ export class App extends Component {
     });
   };
 
-  onLoadMore = data => {
+  onLoadMore = ()=> {
     const { searchItem, nextPage } = this.state;
 
     pagination(searchItem, nextPage)
