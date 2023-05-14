@@ -18,6 +18,8 @@ export class App extends Component {
     alt: null,
     error: null,
     status: 'idle',
+    showButton: true,
+    total: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -34,18 +36,20 @@ export class App extends Component {
               foundImages: foundImages.hits,
               status: 'resolved',
               error: null,
+              total: foundImages.total,
+              showButton: true,
             });
           } else {
-              this.setState({
-                status: 'rejected',
-                error: new Error(`Cannot find photos for ${nextSearch} category`),
-              });
+            this.setState({
+              status: 'rejected',
+              error: new Error(`Cannot find photos for ${nextSearch} category`),
+            });
           }
-
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
+
 
   setSearchItem = data => {
     this.setState({ searchItem: data });
@@ -63,22 +67,26 @@ export class App extends Component {
     });
   };
 
-  onLoadMore = ()=> {
+  onLoadMore = () => {
     const { searchItem, nextPage } = this.state;
 
     pagination(searchItem, nextPage)
-      .then(newImages =>
+      .then(newImages => {
         this.setState(({ foundImages, nextPage }) => ({
           foundImages: [...foundImages, ...newImages.hits],
           status: 'resolved',
           nextPage: nextPage + 1,
-        }))
-      )
+        }));
+        if (this.state.foundImages.length + 12 >= this.state.total) {
+          this.setState({ showButton: false });
+        }
+      })
       .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
   render() {
-    const { showModal, foundImages, largerImage, alt, error, status } = this.state;
+    const { showModal, foundImages, largerImage, alt, error, status, showButton } =
+      this.state;
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.setSearchItem} />
@@ -95,7 +103,7 @@ export class App extends Component {
             <h1>{error.message}</h1>
           </div>
         )}
-        {status === 'resolved' && <Button onClick={this.onLoadMore} />}
+        {status === 'resolved' && showButton && <Button onClick={this.onLoadMore} />}
         {showModal && (
           <Modal
             onClose={this.toggleModal}
